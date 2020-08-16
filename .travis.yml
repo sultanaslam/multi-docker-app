@@ -8,3 +8,13 @@ before_install:
   - docker build -t sultan/react-test -f ./client/Dockerfile.dev ./client
 script:
   - docker run -e CI=true sultan/react-test npm run test
+after_success:
+  - docker build -t sultan/multi-client ./client
+  - docker build -t sultan/multi-api ./api
+  - docker build -t sultan/multi-worker ./worker
+  - docker build -t sultan/multi-nginx ./nginx
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push sultan/multi-client
+  - docker push sultan/multi-api
+  - docker push sultan/multi-worker
+  - docker push sultan/multi-nginx
