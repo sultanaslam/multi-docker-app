@@ -1,6 +1,9 @@
 language: generic
 sudo: required
 
+services:
+  - docker
+  
 before_install: 
   - docker build -t sultan/react-test -f ./client/Dockerfile.dev ./client
 script:
